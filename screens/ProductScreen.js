@@ -1,5 +1,12 @@
-import React from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  Button,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+  FlatList,
+} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   HeaderButtons,
@@ -9,6 +16,8 @@ import {
   OverflowMenu,
 } from 'react-navigation-header-buttons';
 import { styles } from '../components/styles';
+
+import axios from 'axios';
 
 const IoniconsHeaderButton = props => (
   // the `props` here come from <Item ... />
@@ -40,15 +49,29 @@ const ProductScreen = ({navigation}) => {
     });
   }, [navigation]);
 
+  const [product, setProduct] = useState([]);
+  //useEffect when A Product is selected
+  useEffect(() => {
+    //getData from server
+    const getData = async () => {
+      const res = await axios.get('https://api.codingthailand.com/api/course');
+      // alert(JSON.stringify(res.data.data[0].title));
+      setProduct(res.data.data);
+    };
+    getData();
+
+    // return () => {
+    //   second;
+    // };
+  }, []);
+
   return (
     <View style={styles.container}>
-      <Ionicons name="home-outline" size={50} color="skyblue" />
-      <Text>Product</Text>
-      <Button
-        title="Go to About Me"
-        onPress={() =>
-          navigation.navigate('About', {email: 'he.pongpanot_st@tni.ac.th'})
-        }
+      <FlatList 
+      // set the data form server
+      data={product} 
+      // Extract the key from the data with keyExtractor
+      keyExtractor={(item, index) => item.id.toString()}
       />
     </View>
   );
