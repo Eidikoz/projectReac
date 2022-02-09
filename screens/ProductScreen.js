@@ -1,12 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {
-  Button,
-  StyleSheet,
-  Text,
-  View,
-  ActivityIndicator,
-  FlatList,
-} from 'react-native';
+import {StyleSheet, View, ActivityIndicator, FlatList} from 'react-native';
+import { styles } from '../components/styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   HeaderButtons,
@@ -15,9 +9,20 @@ import {
   HiddenItem,
   OverflowMenu,
 } from 'react-navigation-header-buttons';
-import { styles } from '../components/styles';
-
 import axios from 'axios';
+import {
+  Container,
+  Header,
+  Content,
+  List,
+  ListItem,
+  Thumbnail,
+  Text,
+  Left,
+  Body,
+  Right,
+  Button,
+} from 'native-base';
 
 const IoniconsHeaderButton = props => (
   // the `props` here come from <Item ... />
@@ -66,12 +71,31 @@ const ProductScreen = ({navigation}) => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <FlatList 
-      // set the data form server
-      data={product} 
-      // Extract the key from the data with keyExtractor
-      keyExtractor={(item, index) => item.id.toString()}
+    <View>
+      <FlatList
+        // set the data form server
+        data={product}
+        // Extract the key from the data with keyExtractor
+        keyExtractor={(item, index) => item.id.toString()}
+        // render the data with renderItem
+        renderItem={({item}) => (
+          <ListItem thumbnail>
+            <Left>
+              <Thumbnail square source={{uri: item.picture}} />
+            </Left>
+            <Body>
+              <Text>{item.title}</Text>
+              <Text note numberOfLines={1}>
+                {item.detail}
+              </Text>
+            </Body>
+            {/* <Right>
+              <Button transparent>
+                <Text>View</Text>
+              </Button>
+            </Right> */}
+          </ListItem>
+        )}
       />
     </View>
   );
